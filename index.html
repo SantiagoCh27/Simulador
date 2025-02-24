@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Clics</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            border: 2px solid black;
+        }
+        .button {
+            position: absolute;
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #btnOferta {
+            display: none;
+            top: 50%;
+            left: 70%;
+            transform: translate(-50%, -50%);
+        }
+        #inputNumero {
+            display: none;
+            position: absolute;
+            top: calc(50% - 3.8cm);
+            left: 1.5cm;
+        }
+        #btnLanzar {
+            display: none;
+            position: absolute;
+            top: calc(50% - 2.3cm);
+            left: 1.5cm;
+        }
+        #btnAceptar {
+            display: none;
+            position: absolute;
+            top: calc(50% - 3.3cm);
+            left: calc(2.7cm - 3cm);
+        }
+        #cronometro {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        #btnReiniciar {
+            position: relative;
+            margin-top: 50px;
+        }
+        #tiemposPrevios {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div id="cronometro">Tiempo: 0.000s</div>
+    <button id="btnReiniciar" class="button">Reiniciar</button>
+    <div class="container">
+        <button id="btnOferta" class="button">Lanzar Oferta</button>
+        <input id="inputNumero" type="text" value="$293,837,544">
+        <button id="btnLanzar" class="button">Lanzar</button>
+        <button id="btnAceptar" class="button">Aceptar</button>
+    </div>
+    <div id="tiemposPrevios">Tiempos anteriores:</div>
+    <script>
+        let startTime;
+        let running = false;
+        let timer;
+        let tiempos = [];
+
+        function iniciarSimulacion() {
+            document.getElementById('btnOferta').style.display = 'none';
+            document.getElementById('inputNumero').style.display = 'none';
+            document.getElementById('btnLanzar').style.display = 'none';
+            document.getElementById('btnAceptar').style.display = 'none';
+            document.getElementById('cronometro').innerText = "Tiempo: 0.000s";
+            document.getElementById('inputNumero').value = "$293,837,544";
+            running = false;
+
+            setTimeout(() => {
+                document.getElementById('btnOferta').style.display = 'block';
+                startCronometro();
+                setTimeout(() => {
+                    document.getElementById('btnOferta').style.display = 'none';
+                }, 1000);
+            }, 5000);
+        }
+
+        function startCronometro() {
+            startTime = performance.now();
+            running = true;
+            timer = setInterval(() => {
+                let elapsedTime = (performance.now() - startTime) / 1000;
+                document.getElementById('cronometro').innerText = `Tiempo: ${elapsedTime.toFixed(3)}s`;
+            }, 10);
+        }
+
+        document.getElementById('btnOferta').addEventListener('click', function() {
+            document.getElementById('inputNumero').style.display = 'block';
+            document.getElementById('btnLanzar').style.display = 'block';
+        });
+
+        document.getElementById('btnLanzar').addEventListener('click', function() {
+            document.getElementById('btnAceptar').style.display = 'block';
+        });
+
+        document.getElementById('btnAceptar').addEventListener('click', function() {
+            if (running) {
+                clearInterval(timer);
+                let elapsedTime = (performance.now() - startTime) / 1000;
+                document.getElementById('cronometro').innerText = `Tiempo: ${elapsedTime.toFixed(3)}s`;
+                tiempos.push(elapsedTime.toFixed(3));
+                actualizarTiempos();
+                running = false;
+            }
+        });
+
+        function actualizarTiempos() {
+            document.getElementById('tiemposPrevios').innerText = "Tiempos anteriores: " + tiempos.join("s, ") + "s";
+        }
+
+        document.getElementById('btnReiniciar').addEventListener('click', iniciarSimulacion);
+
+        window.onload = iniciarSimulacion;
+    </script>
+</body>
+</html>
