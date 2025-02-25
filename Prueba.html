@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Botón Oculto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #contenedor {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .boton-oferta {
+            position: absolute;
+            left: 10%; /* Posición difícil de predecir */
+            top: 30%;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Prueba de Botón Oculto</h2>
+    <p>El botón aparecerá después de 20 segundos solo por 1 segundo.</p>
+    <div id="contenedor"></div>
+    
+    <script>
+        setTimeout(() => {
+            const contenedor = document.getElementById('contenedor');
+            const boton = document.createElement('button');
+            boton.innerText = 'Lanzar Oferta';
+            boton.className = 'boton-oferta';
+           // boton.style.left = Math.random() * 80 + '%'; // Ubicación aleatoria
+           boton.style.left = '10%'; // Fija la posición en un 10% desde la izquierda
+           // boton.style.top = Math.random() * 80 + '%';
+           boton.style.top = '30%';  // Fija la posición en un 30% desde la parte superior
+            contenedor.appendChild(boton);
+
+            // Si se hace clic en el botón, mostrar una alerta
+            boton.addEventListener('click', () => {
+                alert('¡Oferta lanzada!');
+            });
+
+            // Eliminar el botón después de 1 segundo
+            setTimeout(() => {
+                if (boton.parentNode) {
+                    boton.parentNode.removeChild(boton);
+                }
+            }, 1000);
+        }, 20000); // 20 segundos
+    </script>
+</body>
+</html>

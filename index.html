@@ -29,7 +29,7 @@
         #btnOferta {
             display: none;
             top: 50%;
-            left: 70%;
+            left: 41%;
             transform: translate(-50%, -50%);
         }
         #inputNumero {
@@ -41,14 +41,14 @@
         #btnLanzar {
             display: none;
             position: absolute;
-            top: calc(50% - 2.3cm);
+            top: calc(50% - 2.5cm);
             left: 1.5cm;
         }
         #btnAceptar {
             display: none;
             position: absolute;
-            top: calc(50% - 3.3cm);
-            left: calc(2.7cm - 3cm);
+            top: calc(50% - 3.1cm);
+            left: calc(3.3cm - 3cm);
         }
         #cronometro {
             font-size: 20px;
@@ -74,6 +74,7 @@
         <button id="btnAceptar" class="button">Aceptar</button>
     </div>
     <div id="tiemposPrevios">Tiempos anteriores:</div>
+
     <script>
         let startTime;
         let running = false;
@@ -81,6 +82,7 @@
         let tiempos = [];
 
         function iniciarSimulacion() {
+            // Ocultar todos los botones y resetear estado
             document.getElementById('btnOferta').style.display = 'none';
             document.getElementById('inputNumero').style.display = 'none';
             document.getElementById('btnLanzar').style.display = 'none';
@@ -89,13 +91,16 @@
             document.getElementById('inputNumero').value = "$293,837,544";
             running = false;
 
+            // Mostrar botón "Lanzar Oferta" después de 2 segundos
             setTimeout(() => {
                 document.getElementById('btnOferta').style.display = 'block';
                 startCronometro();
+
+                // Desaparecer el botón "Lanzar Oferta" después de 1 segundo
                 setTimeout(() => {
                     document.getElementById('btnOferta').style.display = 'none';
-                }, 1000);
-            }, 5000);
+                }, 1500);
+            }, 4000);
         }
 
         function startCronometro() {
@@ -128,7 +133,17 @@
         });
 
         function actualizarTiempos() {
-            document.getElementById('tiemposPrevios').innerText = "Tiempos anteriores: " + tiempos.join("s, ") + "s";
+            if (tiempos.length === 0) return;
+
+            let minTiempo = Math.min(...tiempos.map(Number)); // Encontrar el menor tiempo
+            let tiemposHTML = tiempos.map(tiempo => {
+                if (parseFloat(tiempo) === minTiempo) {
+                    return `<span style="color: red; font-weight: bold;">${tiempo}s</span>`;
+                }
+                return `${tiempo}s`;
+            }).join(", ");
+
+            document.getElementById('tiemposPrevios').innerHTML = `Tiempos anteriores: ${tiemposHTML}`;
         }
 
         document.getElementById('btnReiniciar').addEventListener('click', iniciarSimulacion);
